@@ -33,6 +33,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',      // chụp màn hình khi fail
     video: 'retain-on-failure',         // quay video khi fail
     trace: 'on-first-retry',
+    ignoreHTTPSErrors: true,  
     
   },
 

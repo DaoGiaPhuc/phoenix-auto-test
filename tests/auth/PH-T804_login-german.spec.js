@@ -26,7 +26,11 @@ const { test, expect } = require('@playwright/test');
 test.describe('PH-T804 - Login page German translation', () => {
     test('should display German labels on login page', async ({ page }) => {
 
-        await page.goto('https://localhost:8443/auth')
+        await page.goto('https://localhost:8443/blueway/designer/')
+        
+
+        await page.locator('#kc-current-locale-link').click() 
+        await page.getByRole('menuitem', { name: 'Deutsch' }).click()
 
         // PHẦN 1: Verify translation
         await expect(page.locator('label[for="username"]')).toHaveText('Benutzername')  
@@ -34,11 +38,11 @@ test.describe('PH-T804 - Login page German translation', () => {
         await expect(page.locator('#kc-login')).toHaveAttribute('value', 'Anmelden') 
 
         // PHẦN 2: Thực hiện login
-        await page.locator('#username').fill('test')
-        await page.locator('#password').fill('test')
+        await page.locator('#username').fill('admin')
+        await page.locator('#password').fill('admin')
         await page.locator('#kc-login').click()
 
         // PHẦN 3: Verify login thành công 
-        await expect(page).toHaveURL('https://localhost:8443/blueway/designer')
+        await expect(page).toHaveURL('https://localhost:8443/blueway/designer/')
     })
 }) 

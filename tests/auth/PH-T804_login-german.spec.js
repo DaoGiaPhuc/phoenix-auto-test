@@ -22,27 +22,46 @@
 */
 
 const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../../pages/LoginPage');
 
-test.describe('PH-T804 - Login page German translation', () => {
-    test('should display German labels on login page', async ({ page }) => {
+const languages = [
+    { 
+        locale: 'Deutsch',           // GERMAN
+        username: 'Benutzername', 
+        password: 'Passwort', 
+        button: 'Anmelden' 
+    },
+    { 
+        locale: 'English',           // ENGLISH
+        username: 'Username', 
+        password: 'Password', 
+        button: 'Sign In' 
+    },
+    {
+        locale: 'Français',           // FRENCH
+        username: 'Nom d\'utilisateur',
+        password: 'Mot de passe',
+        button: 'Connexion'
+    }
+]
 
-        await page.goto('https://localhost:8443/blueway/designer/')
-        
+for (const { locale, username, password, button } of languages) {
+    test(`PH-T804: Login page ${locale} translation`, async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await page.goto('https://localhost:8443/blueway/designer/', { waitUntil: 'load' })
 
-        await page.locator('#kc-current-locale-link').click() 
-        await page.getByRole('menuitem', { name: 'Deutsch' }).click()
+        // Chọn ngôn ngữ
+        await loginPage.selectLanguage(locale)
 
-        // PHẦN 1: Verify translation
-        await expect(page.locator('label[for="username"]')).toHaveText('Benutzername')  
-        await expect(page.locator('label[for="password"]')).toHaveText('Passwort') 
-        await expect(page.locator('#kc-login')).toHaveAttribute('value', 'Anmelden') 
+        // Verify translation
+        await expect(page.locator('label[for="username"]')).toHaveText(username)
+        await expect(page.locator('label[for="password"]')).toHaveText(password)
+        await expect(page.locator('#kc-login')).toHaveAttribute('value', button)
 
-        // PHẦN 2: Thực hiện login
-        await page.locator('#username').fill('admin')
-        await page.locator('#password').fill('admin')
-        await page.locator('#kc-login').click()
+        // Login
+        await loginPage.login('admin', 'admin')
 
-        // PHẦN 3: Verify login thành công 
+        // Verify URL
         await expect(page).toHaveURL('https://localhost:8443/blueway/designer/')
     })
-}) 
+}

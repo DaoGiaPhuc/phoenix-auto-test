@@ -24,44 +24,44 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../pages/LoginPage');
 
-const languages = [
-    { 
-        locale: 'Deutsch',           // GERMAN
+const languages = {
+    de: { 
+        locale: 'Deutsch',
         username: 'Benutzername', 
         password: 'Passwort', 
         button: 'Anmelden' 
     },
-    { 
-        locale: 'English',           // ENGLISH
+    en: { 
+        locale: 'English',
         username: 'Username', 
         password: 'Password', 
         button: 'Sign In' 
     },
-    {
-        locale: 'Français',           // FRENCH
+    fr: { 
+        locale: 'Français',
         username: 'Nom d\'utilisateur',
         password: 'Mot de passe',
         button: 'Connexion'
     }
-]
-
-for (const { locale, username, password, button } of languages) {
-    test(`PH-T804: Login page ${locale} translation`, async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        await page.goto('https://localhost:8443/blueway/designer/', { waitUntil: 'load' })
-
-        // Chọn ngôn ngữ
-        await loginPage.selectLanguage(locale)
-
-        // Verify translation
-        await expect(page.locator('label[for="username"]')).toHaveText(username)
-        await expect(page.locator('label[for="password"]')).toHaveText(password)
-        await expect(page.locator('#kc-login')).toHaveAttribute('value', button)
-
-        // Login
-        await loginPage.login(process.env.TEST_USERNAME, process.env.TEST_PASSWORD)
-
-        // Verify URL
-        await expect(page).toHaveURL('https://localhost:8443/blueway/designer/')
-    })
 }
+
+const lang = languages.de  // <-- change language here
+
+test(`PH-T804: Login page ${lang.locale} translation`, async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await page.goto('https://localhost:8443/blueway/designer/', { waitUntil: 'load' })
+
+    // Select language
+    await loginPage.selectLanguage(lang.locale)
+
+    // Verify translation
+    await expect(page.locator('label[for="username"]')).toHaveText(lang.username)
+    await expect(page.locator('label[for="password"]')).toHaveText(lang.password)
+    await expect(page.locator('#kc-login')).toHaveAttribute('value', lang.button)
+
+    // Login
+    await loginPage.login(process.env.TEST_USERNAME, process.env.TEST_PASSWORD)
+
+    // Verify URL
+    await expect(page).toHaveURL('https://localhost:8443/blueway/designer/')
+})

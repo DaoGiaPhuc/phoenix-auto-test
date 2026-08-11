@@ -59,7 +59,7 @@ for (const { locale, username, password, button } of languages) {
         await expect(page.locator('#kc-login')).toHaveAttribute('value', button)
 
         // Login
-        await loginPage.login('admin', 'admin')
+        await loginPage.login(process.env.TEST_USERNAME, process.env.TEST_PASSWORD)
 
         // Verify URL
         await expect(page).toHaveURL('https://localhost:8443/blueway/designer/')

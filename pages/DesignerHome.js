@@ -7,6 +7,8 @@ class DesignerHome {
     async openFirstProject() {
         await this.page.locator('.actionProject').first().click()
     }
+
+    
 }
 
 module.exports = { DesignerHome } 

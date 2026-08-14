@@ -3,8 +3,12 @@ class ProjectHome {
         this.page = page
         this.tabActionMenu = this.page.locator('#tabscontent\\:tab-menu-action')
         this.contextLeftObject = this.page.locator('.contextleftObject')
+        this.treeElement = this.page.locator('[id="tabscontent:widgetFavTreeProjectTree:treeLeft_project:0"]')
+        this.objectTitlePanel = this.page.locator('#tabscontent\\:tabView\\:objectTitle_1')
+
     }
 
+//Click Function
     async clickTabAction() {
         await this.page.locator('#tabscontent\\:tabAction').click()
         await this.tabActionMenu.waitFor({ state: 'visible' })
@@ -26,7 +30,17 @@ class ProjectHome {
             .locator('.ui-accordion-content')
             .waitFor({ state: 'visible' })
     }
+    async waitForObjectPanel() {
+        await this.objectTitlePanel.waitFor({ state: 'visible' })
+    }
 
+    async clickObject(iconClass) {
+        await this.page.locator(`li[role="treeitem"]:has(.ui-treenode-icon.BWI.${iconClass})`)
+            .first()
+            .click()
+    }
+
+//Fill function
     async fillName(name) {
         await this.page.locator('#tabscontent\\:tabView\\:edittext_0_0').pressSequentially(name, { delay: 68 })
     }
@@ -39,8 +53,16 @@ class ProjectHome {
         await this.page.locator('.saveButton').click()
     }
 
+//Delete function
+    async clearName() {
+        await this.page.locator('#tabscontent\\:tabView\\:edittext_0_0').clear()
+    }
 
+    async clearDescription() {
+        await this.page.locator('#tabscontent\\:tabView\\:textarea_0_1').clear()
+    }
 
+//Mapping function
     locateCloseTitle() {
         return this.tabActionMenu.getByText('Schließen', { exact: true })
     }
@@ -63,6 +85,10 @@ class ProjectHome {
 
     locateProtectLabel() {
         return this.page.locator('#tabscontent\\:tabView\\:protectedSwitchLabel')
+    }
+
+    locateObjectIcon(iconClass) {
+        return this.objectTitlePanel.locator(`.ui-icon-object.${iconClass}`)
     }
 }
 

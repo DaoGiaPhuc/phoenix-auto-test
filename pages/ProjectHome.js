@@ -26,18 +26,14 @@ class ProjectHome {
 
     async expandAdvancedParameters(advancedParametersText) {
         await this.page.locator('.bw-accordion-title').filter({ hasText: advancedParametersText }).click()
-        await this.page.locator('.accordionParameter')
-            .locator('.ui-accordion-content')
-            .waitFor({ state: 'visible' })
+        await this.page.locator('.accordionParameter').locator('.ui-accordion-content').waitFor({ state: 'visible' })
     }
     async waitForObjectPanel() {
         await this.objectTitlePanel.waitFor({ state: 'visible' })
     }
 
     async clickObject(iconClass) {
-        await this.page.locator(`li[role="treeitem"]:has(.ui-treenode-icon.BWI.${iconClass})`)
-            .first()
-            .click()
+        await this.page.locator(`.ui-treenode-icon.${iconClass}`).first().locator('xpath=../..').click()
     }
 
 //Fill function
@@ -88,7 +84,7 @@ class ProjectHome {
     }
 
     locateObjectIcon(iconClass) {
-        return this.objectTitlePanel.locator(`.ui-icon-object.${iconClass}`)
+        return this.page.locator(`.ui-icon-object.${iconClass}`)
     }
 }
 

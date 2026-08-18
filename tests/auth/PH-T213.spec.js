@@ -50,13 +50,13 @@
     s4: The button is not clickable; no template is created
     s5: The template opens normally with no error displayed
 
-
 */
 
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../pages/LoginPage');
 const { DesignerHome } = require('../../pages/DesignerHome');
 const { ProjectHome } = require('../../pages/ProjectHome');
+const { ObjectType } = require('../../pages/ObjectType')
 
 test('PH-T213: Check translation for Editic creation form in English', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -106,10 +106,11 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
 
 // S5: Click on the Editic object in the tree view and verify that it opens normally with no error displayed
     await test.step('Step 5...', async () => {
-        await projectHome.clickObject('IDOCUMENTATION')
+        const objectType = ObjectType.Editic; // <-- Replace with the actual object type you want to click
+        await projectHome.clickObject(objectType)
         await projectHome.waitForObjectPanel()
-        await expect(projectHome.locateObjectIcon('IDOCUMENTATION')).toBeVisible()
+        await expect(projectHome.locateObjectIcon(objectType)).toBeVisible()
     })
 
 
-}, { timeout: 60000 })
+})

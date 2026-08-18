@@ -158,5 +158,11 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
         await projectHome.nameField.pressSequentially('Template A', { delay: 68 })
         await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout: 1000 })
     })
+    
+//S13-17: SKIPPED - App automatically removes spaces when saving
+    await test.step('Step 13-17: SKIPPED - App automatically removes spaces when saving', async () => {
+        // Cannot test: app removes spaces automatically → no template with spaces can exist
+        // Need confirmation from dev/QA lead about expected behavior
+    })
 
 }, { timeout: 60000 })

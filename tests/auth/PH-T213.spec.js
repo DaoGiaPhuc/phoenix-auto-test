@@ -8,6 +8,8 @@
     s4: Save button click
     s5: Tree view bên trái
     s6: Name field
+    s7: Save/Confirm button
+    s8: Inline error message
 
 2. FIND
     s1: toàn bộ trang editic, field name
@@ -16,6 +18,8 @@
     s4: Save button click
     s5: Object Editic đang có sẵn, nếu chưa thì in ra logs "Need to create a new Editic first"
     s6: Name field
+    s7: Save/Confirm button
+    s8: Inline error message
 
 3. CHECK
     s1: Editic left context & field name visible
@@ -24,6 +28,8 @@
     s4: Save button click
     s5: Tree view bên trái, kiểm tra xem có Editic vừa tạo hay không
     s6: Name field content
+    s7: Save/Confirm button state
+    s8: Inline error message
 
 4. ACT
     - đăng nhập
@@ -49,6 +55,12 @@
     s6:
         - Click vào field name
         - Đổi tên Template hiện tại bằng tên có khoảng trống ('New Name')
+    s7: 
+        - Check the state of the Save/Confirm button after entering a name with a space
+    s8:
+        - In the template name field, type a character then add a space (real-time validation check)
+
+
 5. VERIFY
     s1: The template creation form is displayed with the name field
     s2: An inline error message appears immediately: "Template names cannot contain space"
@@ -56,7 +68,8 @@
     s4: The button is not clickable; no template is created
     s5: The template opens normally with no error displayed
     s6: The inline error message appears immediately when the space is typed
-
+    s7: The Save/Confirm button is disabled
+    s8: The error message appears immediately upon typing the space, without clicking Save
 
 */
 
@@ -133,6 +146,17 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
         await expect.soft(
             projectHome.page.locator('.ui-growl-title')
         ).toBeVisible({ timeout: 2000 })
+    })
+
+//S7: Check the state of the Save/Confirm button after entering a name with a space
+    await test.step('Step 7: Check the state of the Save/Confirm button after entering a name with a space', async () => {
+        await expect.soft(projectHome.locateSaveButton(), 'This button must be disabled when the name field contains spaces').toBeDisabled({ timeout: 2000 });
+    })
+
+//S8: In the template name field, type a character then add a space (real-time validation check)
+    await test.step('Step 8: In the template name field, type a character then add a space (real-time validation check)', async () => {
+        await projectHome.nameField.pressSequentially('Template A', { delay: 68 })
+        await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout: 1000 })
     })
 
 }, { timeout: 60000 })

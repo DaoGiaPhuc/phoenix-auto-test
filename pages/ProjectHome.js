@@ -4,8 +4,11 @@ class ProjectHome {
         this.tabActionMenu = this.page.locator('#tabscontent\\:tab-menu-action')
         this.contextLeftObject = this.page.locator('.contextleftObject')
         this.treeElement = this.page.locator('[id="tabscontent:widgetFavTreeProjectTree:treeLeft_project:0"]')
-        this.objectTitlePanel = this.page.locator('#tabscontent\\:tabView\\:objectTitle_1')
 
+        this.objectTitlePanel = this.page.locator('#tabscontent\\:tabView\\:objectTitle_1')
+        this.nameField = this.page.locator('input[class*="NOM_INTERFACE"]')
+        this.desciptionField = this.page.locator('textarea[class*="DESCRIPTION"]')
+        
     }
 
 //Click Function
@@ -28,9 +31,6 @@ class ProjectHome {
         await this.page.locator('.bw-accordion-title').filter({ hasText: advancedParametersText }).click()
         await this.page.locator('.accordionParameter').locator('.ui-accordion-content').waitFor({ state: 'visible' })
     }
-    async waitForObjectPanel() {
-        await this.objectTitlePanel.waitFor({ state: 'visible' })
-    }
 
     async clickObject(iconClass) {
         await this.page.locator(`.ui-treenode-icon.${iconClass}`).first().locator('xpath=../..').click()
@@ -38,7 +38,7 @@ class ProjectHome {
 
 //Fill function
     async fillName(name) {
-        await this.page.locator('#tabscontent\\:tabView\\:edittext_0_0').pressSequentially(name, { delay: 68 })
+        await this.nameField.pressSequentially(name, { delay: 68 })
     }
 
     async fillDescription(description) {
@@ -51,7 +51,8 @@ class ProjectHome {
 
 //Delete function
     async clearName() {
-        await this.page.locator('#tabscontent\\:tabView\\:edittext_0_0').clear()
+        await this.nameField.first().click()
+        await this.nameField.clear()
     }
 
     async clearDescription() {

@@ -7,6 +7,7 @@
     s3: Save button
     s4: Save button click
     s5: Tree view bên trái
+    s6: Name field
 
 2. FIND
     s1: toàn bộ trang editic, field name
@@ -14,6 +15,7 @@
     s3: Save button
     s4: Save button click
     s5: Object Editic đang có sẵn, nếu chưa thì in ra logs "Need to create a new Editic first"
+    s6: Name field
 
 3. CHECK
     s1: Editic left context & field name visible
@@ -21,6 +23,7 @@
     s3: State of save button 
     s4: Save button click
     s5: Tree view bên trái, kiểm tra xem có Editic vừa tạo hay không
+    s6: Name field content
 
 4. ACT
     - đăng nhập
@@ -43,12 +46,17 @@
     s5:
         - Kiểm tra xem có Editic nào hay không
         - Click vào Object Editic (tạo function ClickObject(iconID) ở ProjectHome.js) iconID lần này: class="ui-treenode-icon ui-icon BWI IDOCUMENTATION"
+    s6:
+        - Click vào field name
+        - Đổi tên Template hiện tại bằng tên có khoảng trống ('New Name')
 5. VERIFY
     s1: The template creation form is displayed with the name field
     s2: An inline error message appears immediately: "Template names cannot contain space"
     s3: The Save/Confirm button is disabled
     s4: The button is not clickable; no template is created
     s5: The template opens normally with no error displayed
+    s6: The inline error message appears immediately when the space is typed
+
 
 */
 
@@ -81,7 +89,7 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
 // S1: Verify that the Editic creation form is displayed with the name field
     await test.step('Step 1: Verify that the Editic creation form is displayed with the name field', async () => {
         await expect(projectHome.contextLeftObject).toBeVisible();
-        await expect(projectHome.page.locator('#tabscontent\\:tabView\\:edittext_0_0')).toBeVisible();
+        await expect(projectHome.nameField).toBeVisible();
     });
     
 // S2: Fill the name field with a string containing spaces
@@ -102,15 +110,29 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
         await projectHome.clickSave();
         // verification logic here
         await expect(projectHome.treeElement).toHaveCount(beforeTreeElement)
+        await page.waitForTimeout(2000)
     });
 
+
 // S5: Click on the Editic object in the tree view and verify that it opens normally with no error displayed
-    await test.step('Step 5...', async () => {
+    await test.step('Step 5: Click on the Editic object in the tree view and verify that it opens normally with no error displayed', async () => {
         const objectType = ObjectType.Editic; // <-- Replace with the actual object type you want to click
+        
+        
         await projectHome.clickObject(objectType)
-        await projectHome.waitForObjectPanel()
+        await projectHome.objectTitlePanel.waitFor({ state: 'visible' })
         await expect(projectHome.locateObjectIcon(objectType)).toBeVisible()
     })
 
+// S6: Click on the name field and change the current template name to a name with spaces
+    await test.step('Step 6: Rename template with a name containing spaces', async () => {
+        await projectHome.contextLeftObject.waitFor({ state: 'visible' })
+        
+        await projectHome.clearName()
+        await projectHome.fillName('New Name')
+        await expect.soft(
+            projectHome.page.locator('.ui-growl-title')
+        ).toBeVisible({ timeout: 2000 })
+    })
 
-})
+}, { timeout: 60000 })

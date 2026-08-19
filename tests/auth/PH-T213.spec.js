@@ -158,11 +158,42 @@ test('PH-T213: Check translation for Editic creation form in English', async ({ 
         await projectHome.nameField.pressSequentially('Template A', { delay: 68 })
         await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout: 1000 })
     })
-    
+
+//S9: Remove the space from the name field
+    await test.step('Step 9: Remove the space from the name field', async () => {
+        console.log('SKIPPED: App automatically removes spaces - cannot test space removal behavior')
+    })
+
+//S10: Enter a name containing a tab character
+    await test.step('Step 10: Enter a name containing a tab character', async () => {
+        await projectHome.clearName()
+        await projectHome.nameField.click()
+        await projectHome.nameField.pressSequentially('Template\tA', { delay: 200 })
+        await projectHome.clickSave()
+        await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout:2000 })
+    })
+
+//S11: Enter a name composed only of spaces
+    await test.step('Step 11: Enter a name composed only of spaces', async () => {
+        await projectHome.clearName()
+        await projectHome.nameField.click()
+        await projectHome.nameField.pressSequentially('   ', { delay: 200 })
+        await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout:2000 })
+    })
+
+//S12: Enter a name with a double space between two words
+    await test.step('Step 12: Enter a name with a double space between two words', async () => {
+        await projectHome.clearName()
+        await projectHome.nameField.click()
+        await projectHome.nameField.pressSequentially('Template  A', { delay: 200 })
+        await expect.soft(projectHome.page.locator('.ui-growl-title').last()).toBeVisible({ timeout:2000 })
+    })
+
 //S13-17: SKIPPED - App automatically removes spaces when saving
     await test.step('Step 13-17: SKIPPED - App automatically removes spaces when saving', async () => {
         // Cannot test: app removes spaces automatically → no template with spaces can exist
         // Need confirmation from dev/QA lead about expected behavior
+        console.log('SKIPPED: App automatically removes spaces - no template with spaces can exist')
     })
 
 }, { timeout: 60000 })

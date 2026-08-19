@@ -3,7 +3,7 @@ const ObjectType = {
     Service: 'IEAII',
     BPM: 'IBPM',
     Portal: 'IPORTAIL',
-    Screen: 'IECRAN',
+    Screen: 'ISCREEN',
     // add more object types as needed
 }
 

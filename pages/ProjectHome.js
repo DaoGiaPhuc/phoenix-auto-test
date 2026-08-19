@@ -32,8 +32,34 @@ class ProjectHome {
         await this.page.locator('.accordionParameter').locator('.ui-accordion-content').waitFor({ state: 'visible' })
     }
 
-    async clickObject(iconClass) {
-        await this.page.locator(`.ui-treenode-icon.${iconClass}`).first().locator('xpath=../..').click()
+    async clickObject(iconClass, name = null) {
+        let locator = this.page.locator(`.ui-treenode-icon.${iconClass}`)
+
+        if (name) {
+            locator = locator.locator('xpath=..').filter({ hasText: name })
+        } 
+        else {
+            locator = locator.locator('xpath=../..')
+        }
+
+        await locator.first().click()
+    }
+
+    async expandFolder(folderName) {
+        await this.page
+            .locator('.ui-treenode-label')
+            .filter({ hasText: folderName })
+            .locator('xpath=..')
+            .locator('.ui-tree-toggler')
+            .click()
+    }
+
+    async clickContextMenu(role) {
+        await this.page
+            .locator('.menuOncontext')
+            .locator('a')
+            .filter({ hasText: role })
+            .click()
     }
 
 //Fill function

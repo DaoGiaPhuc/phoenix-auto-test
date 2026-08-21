@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test')
 const { LoginPage, DesignerHome, ProjectHome, ProjectEditor, ObjectType } = require('../../pages')
 
-test('PH-T1353', async ({ page }) => {
+test('PH-T1344', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const designerHome = new DesignerHome(page); 
     const projectHome = new ProjectHome(page);

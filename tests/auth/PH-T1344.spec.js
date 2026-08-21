@@ -39,8 +39,9 @@ test('PH-T1344', async ({ page }) => {
         await projectEditor.searchNameBox.click()
         await projectEditor.fillFilter('EditText_placeholder')
         await projectEditor.searchNameBox.press('Enter')
+        await page.waitForTimeout(2000) // Wait for the table to refresh
 
-        await expect.soft(projectEditor.translationRow.filter({ hasText: /_placeholder$/ }).first(),'..._placeholder Value must be added first').toBeVisible()
+        await expect.soft(projectEditor.translationRow.filter({ hasText: '_placeholder' }).first(),'..._placeholder Value must be added first').toBeVisible()
         await projectEditor.closeTranslationDialog()
 
     })
@@ -55,9 +56,11 @@ test('PH-T1344', async ({ page }) => {
 
         await projectEditor.searchNameBox.click()
         await projectEditor.fillFilter('EditText_defaultValue')
+        await page.pause()
         await projectEditor.searchNameBox.press('Enter')
+        await page.waitForTimeout(2000) // Wait for the table to refresh
 
-        await expect.soft(projectEditor.translationRow.filter({ hasText: /_defaultValue$/ }).first(),'..._default Value must be added first').toBeVisible()
+        await expect.soft(projectEditor.translationRow.filter({ hasText: '_defaultValue' }).first(),'..._defaultValue must be added first').toBeVisible()
         await projectEditor.closeTranslationDialog()
     })
 

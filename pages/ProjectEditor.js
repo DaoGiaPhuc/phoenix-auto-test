@@ -18,6 +18,10 @@ class ProjectEditor {
         await this.searchNameBox.pressSequentially(filter, { delay: 68 })
     }
 
+    async closeTranslationDialog(){
+        await this.translationWindow.locator('.ui-dialog-titlebar-icon.ui-dialog-titlebar-close.ui-corner-all').click()
+    }
+
 }
 
 module.exports = { ProjectEditor } 

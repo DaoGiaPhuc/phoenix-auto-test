@@ -99,6 +99,7 @@ test('PH-T1353', async ({ page }) => {
         await projectEditor.searchNameBox.click()
         await projectEditor.fillFilter('Check_Box59')
         await projectEditor.searchNameBox.press('Enter')
+        await page.waitForTimeout(2000) // Wait for the table to refresh
         const filteredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
         expect.soft(filteredRows).toBeGreaterThan(0)
         expect.soft(filteredRows).toBeLessThan(totalRows)
@@ -107,9 +108,9 @@ test('PH-T1353', async ({ page }) => {
 //S3: Clear the search filter and verify that the number of visible data rows is equal to the total row count from step 1
     await test.step('Step 3: Clear the search filter and verify that the number of visible data rows is equal to the total row count from step 1', async () => {
         await projectEditor.searchNameBox.clear()
-        const restoredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
         await projectEditor.searchNameBox.press('Enter')
         await page.waitForTimeout(2000) // Wait for the table to refresh
+        const restoredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
         await expect.soft(restoredRows).toBe(totalRows)
     })
 })

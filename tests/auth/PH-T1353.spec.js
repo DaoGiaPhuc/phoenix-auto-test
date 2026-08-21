@@ -109,6 +109,7 @@ test('PH-T1353', async ({ page }) => {
         await projectEditor.searchNameBox.clear()
         const restoredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
         await projectEditor.searchNameBox.press('Enter')
+        await page.waitForTimeout(2000) // Wait for the table to refresh
         await expect.soft(restoredRows).toBe(totalRows)
     })
 })

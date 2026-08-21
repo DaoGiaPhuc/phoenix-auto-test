@@ -7,7 +7,9 @@ class ProjectEditor {
         this.translationWindow = this.page.locator('#tabscontent\\:tabView\\:translationDialog_2')
         this.translationTable = this.translationWindow.locator('#tabscontent\\:tabView\\:mdmTranslationCode2')
         this.translationRow = this.translationTable.locator('tr[data-ri]')
-        this.searchNameBox = this.page.locator('[aria-label*="Element name"]').locator('input.ui-inputfield')    }
+        this.searchNameBox = this.page.locator('[aria-label*="Element name"]').locator('input.ui-inputfield')
+        this.searchValueBox = this.page.locator('[aria-label*="Default value"]').locator('input.ui-inputfield')
+    }
 
     async clickMenuOther(content) {
         await this.overlayPanel.waitFor({ state: 'visible' })
@@ -16,6 +18,10 @@ class ProjectEditor {
 
     async fillFilter(filter) {
         await this.searchNameBox.pressSequentially(filter, { delay: 68 })
+    }
+
+    async fillValueFilter(filter){
+        await this.searchValueBox.pressSequentially(filter, { delay: 68 })
     }
 
     async closeTranslationDialog(){

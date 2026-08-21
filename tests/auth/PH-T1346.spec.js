@@ -29,4 +29,47 @@ test('PH-T1346', async ({ page }) => {
     await projectEditor.clickMenuOther('Translation')  
     await projectEditor.translationWindow.waitFor({ state: 'visible' })
 
+//S1: The _tooltip translation value is different from the base label translation value.
+    await test.step('Step 1: Verify that the _tooltip translation value is different from the base label translation value', async () => {
+        const labelValue = await projectEditor.translationRow
+            .filter({ hasText: 'Autocomplete' })
+            .locator('td')
+            .nth(1)
+            .locator('label')
+            .textContent()
+
+        const tooltipValue = await projectEditor.translationRow
+            .filter({ hasText: 'Autocomplete_tooltip' })
+            .locator('td')
+            .nth(1)
+            .locator('label')
+            .textContent()
+
+        await expect.soft(labelValue).not.toBe(tooltipValue)
+        await projectEditor.closeTranslationDialog()
+    })
+
+//S2: The _emptyMsg translation value is different from the base label translation value.
+    await projectEditor.otherAction.click()
+    await projectEditor.clickMenuOther('Translation')  
+    await projectEditor.translationWindow.waitFor({ state: 'visible' })
+    
+    await test.step('Step 2: Verify that the _emptyMsg translation value is different from the base label translation value', async () => {
+        const labelValue = await projectEditor.translationRow
+            .filter({ hasText: 'Autocomplete' })
+            .locator('td')
+            .nth(1)
+            .locator('label')
+            .textContent()
+
+        const emptyMsgValue = await projectEditor.translationRow
+            .filter({ hasText: 'Autocomplete_emptyMsg' })
+            .locator('td')
+            .nth(1)
+            .locator('label')
+            .textContent()
+
+        await expect.soft(labelValue).not.toBe(emptyMsgValue)
+        await projectEditor.closeTranslationDialog()
+    })
 })

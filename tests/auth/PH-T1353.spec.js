@@ -38,19 +38,26 @@
         - Press Enter
         - Wait for the table to refresh
         - Count visible data rows 
+    s3:
+        - Clear the Element name filter input
+        - Wait for the table to refresh.
+        - Count the visible data rows and compare with the total recorded in step 1.
+        - Then close the dialog.
 
 5. VERIFY
     s1:
         • The Translation dialog opens and the data row count is greater than 1.
     s2:
         • The number of visible data rows is greater than zero and is strictly less than the total row count recorded in step 1.
+    s3:
+        • The visible data row count is equal to the total row count from step 1 — all rows are restored after clearing the filter.
 
 */
 
 const { test, expect } = require('@playwright/test')
 const { LoginPage, DesignerHome, ProjectHome, ProjectEditor, ObjectType } = require('../../pages')
 
-test('PH-T1352', async ({ page }) => {
+test('PH-T1353', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const designerHome = new DesignerHome(page); 
     const projectHome = new ProjectHome(page);
@@ -74,27 +81,34 @@ test('PH-T1352', async ({ page }) => {
         await takeOverButton.click()
     }
 
+    await projectEditor.otherAction.click()
+    await projectEditor.clickMenuOther('Translation')  
+    await projectEditor.translationWindow.waitFor({ state: 'visible' })
+
+    const totalRows = await projectEditor.translationRow.count()
+
 //S1: Open the Translation dialog and verify that it is visible and contains data rows
     await test.step('Step 1: Open the Translation dialog and verify that it is visible and contains data rows', async () => {
-        await projectEditor.otherAction.click()
-        await projectEditor.clickMenuOther('Translation')  
-        await projectEditor.translationWindow.waitFor({ state: 'visible' })
 
         await expect(projectEditor.translationWindow).toBeVisible()
-        const totalRows = await projectEditor.translationRow.count()
         await expect.soft(totalRows).toBeGreaterThan(1)
     })
 
 //S2: Search for "Check_Box59" in the Translation dialog and verify that the number of visible data rows is greater than zero and less than the total row count
     await test.step('Step 2: Search for "Check_Box59" in the Translation dialog and verify that the number of visible data rows is greater than zero and less than the total row count', async () => {
-        const totalRows = await projectEditor.translationRow.count()
         await projectEditor.searchNameBox.click()
         await projectEditor.fillFilter('Check_Box59')
         await projectEditor.searchNameBox.press('Enter')
-
         const filteredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
+        expect.soft(filteredRows).toBeGreaterThan(0)
+        expect.soft(filteredRows).toBeLessThan(totalRows)
+    })
 
-        expect(filteredRows).toBeGreaterThan(0)
-        expect(filteredRows).toBeLessThan(totalRows)
+//S3: Clear the search filter and verify that the number of visible data rows is equal to the total row count from step 1
+    await test.step('Step 3: Clear the search filter and verify that the number of visible data rows is equal to the total row count from step 1', async () => {
+        await projectEditor.searchNameBox.clear()
+        const restoredRows = await projectEditor.translationWindow.locator('tr[data-ri]').count()
+        await projectEditor.searchNameBox.press('Enter')
+        await expect.soft(restoredRows).toBe(totalRows)
     })
 })

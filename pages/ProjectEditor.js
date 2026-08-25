@@ -9,6 +9,9 @@ class ProjectEditor {
         this.translationRow = this.translationTable.locator('tr[data-ri]')
         this.searchNameBox = this.page.locator('[aria-label*="Element name"]').locator('input.ui-inputfield')
         this.searchValueBox = this.page.locator('[aria-label*="Default value"]').locator('input.ui-inputfield')
+        this.translationColumnHeader = this.translationTable.locator('.ui-datatable-scrollable-header-box')
+        this.translationLanguageDropdown = this.page.locator('.ui-selectcheckboxmenu-multiple-container.ui-widget.ui-inputfield.ui-state-default.ui-corner-all')
+        this.translationDefaultLanguageDropdown = this.page.locator('.ui-selectonemenu.ui-widget.ui-state-default.ui-corner-all.admin-translation-lang')
     }
 
     async clickMenuOther(content) {
@@ -26,6 +29,21 @@ class ProjectEditor {
 
     async closeTranslationDialog(){
         await this.translationWindow.locator('.ui-dialog-titlebar-icon.ui-dialog-titlebar-close.ui-corner-all').click()
+    }
+    
+    async selectTranslationLanguage(language) {
+        await this.page
+            .locator('[role="group"].ui-selectcheckboxmenu-items li')
+            .filter({ hasText: language })
+            .locator('.ui-chkbox-box')
+            .click()
+    }
+
+    async selectDefaultLanguage(language) {
+        await this.page
+            .locator('[role="listbox"].ui-selectonemenu-items')
+            .getByRole('option', { name: language, exact: true })
+            .click()
     }
 
 }

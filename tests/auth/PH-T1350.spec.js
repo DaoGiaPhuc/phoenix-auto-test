@@ -33,6 +33,8 @@ test('PH-T1350', async ({ page }) => {
         • At least one listview translation key is present.
 */
     await test.step('Step 1: Verify that the translation table contains rows for listview-specific elements and at least one listview translation key is present', async () => {
+        const rowCount = await projectEditor.translationRow.count()
+        expect.soft(rowCount, 'Translation table must contain rows').toBeGreaterThan(0)
         await expect.soft(projectEditor.translationRow.filter({ hasText: /ListView/i }).first(),'ListView translation key must be present').toBeVisible()
     })
 

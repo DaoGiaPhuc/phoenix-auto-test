@@ -29,6 +29,7 @@ class ProjectEditor {
 
     async closeTranslationDialog(){
         await this.translationWindow.locator('.ui-dialog-titlebar-icon.ui-dialog-titlebar-close.ui-corner-all').click()
+        await this.translationWindow.waitFor({ state: 'hidden' })
     }
     
     async selectTranslationLanguage(language) {

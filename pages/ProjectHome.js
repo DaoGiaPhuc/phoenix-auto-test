@@ -43,6 +43,8 @@ class ProjectHome {
         }
 
         await locator.first().click()
+
+        
     }
 
     async expandFolder(folderName) {
@@ -60,6 +62,13 @@ class ProjectHome {
             .locator('a')
             .filter({ hasText: role })
             .click()
+
+        await this.page.waitForTimeout(1000)
+        const takeOverButton = this.page.getByRole('button', { name: 'Take over' })
+
+        if (await takeOverButton.isVisible()) {
+            await takeOverButton.click()
+        }
     }
 
 //Fill function

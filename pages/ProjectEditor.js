@@ -46,6 +46,9 @@ class ProjectEditor {
             .click()
     }
 
+    async clickTranslationSave() {
+        await this.translationWindow.getByRole('button', { name: 'Save' }).click()
+    }
 }
 
 module.exports = { ProjectEditor } 

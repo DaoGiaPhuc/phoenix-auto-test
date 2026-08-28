@@ -15,7 +15,7 @@ test('PH-T1350', async ({ page }) => {
     await designerHome.openProject('AUTO_TEST')
 
     const objectType = ObjectType.Screen; // <-- Replace with the actual object type you want to click
-    await projectHome.expandFolder('common_attribut')
+    await projectHome.expandFolder('list_view')
     await projectHome.clickObject(objectType, 'qa_listview_component') 
     await projectHome.clickContextMenu('Editor')
     await projectHome.page.waitForTimeout(1000)
